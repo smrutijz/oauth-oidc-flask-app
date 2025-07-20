@@ -33,7 +33,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: index.docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_3CF9CE7781E147CD845AA331FF27ED29 }}/smrutijz/oauth-oidc-flask-app:${{ github.sha }}
+          tags: |
+            index.docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_3CF9CE7781E147CD845AA331FF27ED29 }}/oauth-oidc-flask-app:${{ github.sha }}
+            index.docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_3CF9CE7781E147CD845AA331FF27ED29 }}/oauth-oidc-flask-app:latest
           file: ./Dockerfile
 
   deploy:
