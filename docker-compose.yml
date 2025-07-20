@@ -2,7 +2,7 @@ version: "3.10"
 
 services:
   app:
-    image: smrutijz/oauth-oidc-app:latest
+    image: smrutijz/oauth-oidc-flask-app:latest
     container_name: oidc_app
     ports:
       - "8080:8080"
