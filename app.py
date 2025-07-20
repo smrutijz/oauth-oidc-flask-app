@@ -27,7 +27,7 @@ client = oauth.register(
     name='oidc',
     client_id=os.getenv("CLIENT_ID"),
     client_secret=os.getenv("CLIENT_SECRET"),
-    server_metadata_url=os.getenv('SERVER_METADAT_URL'),
+    server_metadata_url=os.getenv('SERVER_METADATA_URL'),
     client_kwargs={
         'scope': 'openid profile email',
         'verify': False
