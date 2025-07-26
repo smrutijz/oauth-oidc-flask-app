@@ -24,7 +24,7 @@ jobs:
       - name: Log in to container registry
         uses: docker/login-action@v2
         with:
-          registry: docker.io/
+          registry: docker.io
           username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_513DC28C62264C76AB0DB03CE0E0D119 }}
           password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_367BD88EC03947C18F2A57E35BB2E208 }}
 
@@ -33,7 +33,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_513DC28C62264C76AB0DB03CE0E0D119 }}/oauth-oidc-flask-app:${{ github.sha }}
+          tags: index.docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_513DC28C62264C76AB0DB03CE0E0D119 }}/oauth-oidc-flask-app:${{ github.sha }}
           file: ./Dockerfile
 
   deploy:
@@ -50,5 +50,5 @@ jobs:
         with:
           app-name: 'wap-apac-oauth-oidc-flask-app'
           slot-name: 'Production'
-          images: 'docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_513DC28C62264C76AB0DB03CE0E0D119 }}/oauth-oidc-flask-app:${{ github.sha }}'
+          images: 'index.docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_513DC28C62264C76AB0DB03CE0E0D119 }}/oauth-oidc-flask-app:${{ github.sha }}'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4D30A227F2DA477AACE678B39C2C8D09 }}
