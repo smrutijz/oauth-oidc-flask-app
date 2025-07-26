@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
@@ -33,7 +33,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: index.docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_513DC28C62264C76AB0DB03CE0E0D119 }}/oauth-oidc-flask-app:${{ github.sha }}
+          tags: |
+            index.docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_513DC28C62264C76AB0DB03CE0E0D119 }}/oauth-oidc-flask-app:${{ github.sha }}
+            index.docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_513DC28C62264C76AB0DB03CE0E0D119 }}/oauth-oidc-flask-app:latest
           file: ./Dockerfile
 
   deploy:
