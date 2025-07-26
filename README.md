@@ -1,4 +1,4 @@
-# Okta OAuth OIDC App
+# OAuth OIDC App
 
 A simple containerized app with Okta OAuth/OIDC support.
 
@@ -16,8 +16,8 @@ A simple containerized app with Okta OAuth/OIDC support.
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/smrutijz/okta-oauth-oidc-app.git
-cd okta-oauth-oidc-app
+git clone https://github.com/smrutijz/oauth-oidc-flask-app.git
+cd oauth-oidc-flask-app.git
 ````
 
 ### 2. Create/Add a `.env` file with proper values
@@ -53,8 +53,8 @@ ssh user@your-server-ip
 ### 2. Clone the repo and navigate to it
 
 ```bash
-git clone https://github.com/smrutijz/okta-oauth-oidc-app.git
-cd okta-oauth-oidc-app
+git clone https://github.com/smrutijz/oauth-oidc-flask-app.git
+cd oauth-oidc-flask-app.git
 ```
 
 ### 3. Add a `.env` file with proper values (same as above)
@@ -85,4 +85,4 @@ docker compose down
 ## 🐳 Docker Image
 
 Pulled from Docker Hub:
-`smrutijz/okta-oauth-oidc-app:latest`
+`smrutijz/oauth-oidc-flask-app:latest`
