@@ -30,7 +30,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: index.docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_E5882A7503864F068E22145A79F12819 }}/oauth-oidc-flask-app:${{ github.sha }}
+          tags: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_E5882A7503864F068E22145A79F12819 }}/oauth-oidc-flask-app:${{ github.sha }}
           file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
         with:
           app-name: 'wap-apac-oauth-oidc-flask-app'
           slot-name: 'Production'
-          images: 'index.docker.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_E5882A7503864F068E22145A79F12819 }}/oauth-oidc-flask-app:${{ github.sha }}'
+          images: '${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_E5882A7503864F068E22145A79F12819 }}/oauth-oidc-flask-app:${{ github.sha }}'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_522524CF2E6A4D27A18E4CFF80DE3C3D }}
