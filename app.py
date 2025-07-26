@@ -62,7 +62,7 @@ def auth_callback():
 @app.route('/logout')
 def logout():
     session.pop('user', None)
-    return redirect(os.getenv("SIGNOUT_URL"))
+    return redirect('/')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
