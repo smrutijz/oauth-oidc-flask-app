@@ -1,6 +1,6 @@
 import os
 import uuid
-from flask import Flask, redirect, url_for, session
+from flask import Flask, redirect, url_for, session, render_template
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
 
@@ -38,8 +38,8 @@ client = oauth.register(
 def homepage():
     user = dict(session).get('user')
     if user:
-        return f'Hello, {user["name"]}! You may close this page or <a href="/logout">Logout</a>'
-    return '<a href="/login">Login</a>'
+        return render_template('home.html', user=user)
+    return render_template('login.html')
 
 @app.route('/login')
 def login():
@@ -55,6 +55,7 @@ def auth_callback():
         if not userinfo:
             return 'Authentication failed', 401
         session['user'] = userinfo
+        session['jwt_token'] = token.get('access_token')  # or 'id_token'
         return redirect('/')
     except Exception as e:
         return f'An error occurred: {str(e)}', 500
