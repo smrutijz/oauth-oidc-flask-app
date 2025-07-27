@@ -1,6 +1,7 @@
 import os
 import uuid
-from flask import Flask, redirect, url_for, session, render_template
+import requests
+from flask import Flask, redirect, url_for, session, request, render_template
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
 
@@ -34,12 +35,35 @@ client = oauth.register(
     }
 )
 
+@app.route('/trigger', methods=['GET'])
+def trigger():
+    tid = request.args.get('tid')
+    if tid:
+        session['telegram_id'] = tid
+        return render_template('login.html')
+    return render_template('error.html', error_message="Telegram ID parameter is missing", show_home_button=False), 400
+
 @app.route('/')
 def homepage():
-    user = dict(session).get('user')
-    if user:
-        return render_template('home.html', user=user)
-    return render_template('login.html')
+    tid = dict(session).get('telegram_id')
+    if tid:
+        user = dict(session).get('user')
+        if user:
+            payload = {
+                'tid': tid,
+                'user': user,
+                'jwt_token': session.get('jwt_token')
+            }
+            try:
+                response = requests.post(os.getenv("SMRUTIRBOT_AUTH_URL"), json=payload)
+                response.raise_for_status()
+            except requests.exceptions.RequestException as e:
+                return render_template('error.html', error_message=f"An error occurred while sending data: {e}", show_home_button=True), 500
+            return render_template('home.html', user=user)
+        return render_template('login.html')
+    return render_template('error.html', error_message="Telegram ID parameter is missing", show_home_button=False), 400
+
+
 
 @app.route('/login')
 def login():
@@ -53,12 +77,12 @@ def auth_callback():
         nonce = session.pop('nonce', None)
         userinfo = client.parse_id_token(token, nonce=nonce)
         if not userinfo:
-            return 'Authentication failed', 401
+            return render_template('error.html', error_message="Authentication failed", show_home_button=False), 401
         session['user'] = userinfo
-        session['jwt_token'] = token.get('access_token')  # or 'id_token'
+        session['jwt_token'] = token.get('access_token')
         return redirect('/')
     except Exception as e:
-        return f'An error occurred: {str(e)}', 500
+        return render_template('error.html', error_message=f"An error occurred: {str(e)}", show_home_button=True), 500
 
 @app.route('/logout')
 def logout():
