@@ -54,7 +54,7 @@ def homepage():
             try:
                 payload = {
                     "iss": "smrutirbot",
-                    "sub": tid,
+                    "tid": tid,
                     "user": user,
                     "iat": int(time.time()),
                     "exp": int(time.time()) + 300
