@@ -3,6 +3,8 @@ import uuid
 import requests
 from flask import Flask, redirect, url_for, session, request, render_template
 from authlib.integrations.flask_client import OAuth
+from authlib.jose import jwt
+import time
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -49,21 +51,26 @@ def homepage():
     if tid:
         user = dict(session).get('user')
         if user:
-            payload = {
-                'tid': tid,
-                'user': user,
-                'jwt_token': session.get('jwt_token')
-            }
             try:
-                response = requests.post(os.getenv("SMRUTIRBOT_AUTH_URL"), json=payload)
+                payload = {
+                    "iss": "smrutirbot",
+                    "sub": tid,
+                    "user": user,
+                    "iat": int(time.time()),
+                    "exp": int(time.time()) + 300
+                }
+                header = {"alg": "HS256"}
+                token = jwt.encode(header, payload, os.getenv("JWT_SECRET"))
+
+                headers = {"Authorization": f"Bearer {token.decode() if isinstance(token,bytes) else token}"}
+
+                response = requests.post(os.getenv("SMRUTIRBOT_AUTH_URL"), json=payload, headers=headers)
                 response.raise_for_status()
             except requests.exceptions.RequestException as e:
                 return render_template('error.html', error_message=f"An error occurred while sending data: {e}", show_home_button=True), 500
             return render_template('home.html', user=user)
         return render_template('login.html')
     return render_template('error.html', error_message="Telegram ID parameter is missing", show_home_button=False), 400
-
-
 
 @app.route('/login')
 def login():
@@ -79,7 +86,6 @@ def auth_callback():
         if not userinfo:
             return render_template('error.html', error_message="Authentication failed", show_home_button=False), 401
         session['user'] = userinfo
-        session['jwt_token'] = token.get('access_token')
         return redirect('/')
     except Exception as e:
         return render_template('error.html', error_message=f"An error occurred: {str(e)}", show_home_button=True), 500
