@@ -33,7 +33,7 @@ client = oauth.register(
     server_metadata_url=os.getenv('SERVER_METADATA_URL'),
     client_kwargs={
         'scope': 'openid profile email',
-        'verify': False
+        'verify': True
     }
 )
 
